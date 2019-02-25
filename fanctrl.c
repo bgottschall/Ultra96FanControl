@@ -9,8 +9,9 @@
 #include <fcntl.h>
 #include <getopt.h>
 
-
-#define AXI_S_BASEADDR 0x80000000
+#ifndef S_AXI_BASEADDR
+#error "You need to define S_AXI_BASEADDR!"
+#endif
 
 float regToFloat(u_int32_t f) {
     static const unsigned int _shift = 8;
@@ -60,22 +61,22 @@ void printHelp(char opt, char *optarg) {
 #define regDbgLinear    regToFloat((*((volatile unsigned *)(baseRegister + 14))))
 #define regDbgMaxPWM    regToFloat((*((volatile unsigned *)(baseRegister + 15))))
 
-#define dbgRegAddrLowTemp       AXI_S_BASEADDR + 0 * sizeof(unsigned)
-#define dbgRegAddrMaxTemp       AXI_S_BASEADDR + 1 * sizeof(unsigned)
-#define dbgRegAddrSmooth        AXI_S_BASEADDR + 2 * sizeof(unsigned)
-#define dbgRegAddrFixed         AXI_S_BASEADDR + 3 * sizeof(unsigned)
-#define dbgRegAddrTemp          AXI_S_BASEADDR + 4 * sizeof(unsigned)
-#define dbgRegAddrAlarm         AXI_S_BASEADDR + 5 * sizeof(unsigned)
-#define dbgRegAddrDbgState      AXI_S_BASEADDR + 6 * sizeof(unsigned)
-#define dbgRegAddrDbgPWM        AXI_S_BASEADDR + 7 * sizeof(unsigned)
-#define dbgRegAddrDbgUsePWM     AXI_S_BASEADDR + 8 * sizeof(unsigned)
-#define dbgRegAddrDbgLastPWM    AXI_S_BASEADDR + 9 * sizeof(unsigned)
-#define dbgRegAddrDbgRealTemp   AXI_S_BASEADDR + 10 * sizeof(unsigned)
-#define dbgRegAddrDbgUseTemp    AXI_S_BASEADDR + 11 * sizeof(unsigned)
-#define dbgRegAddrDbgLastTemp   AXI_S_BASEADDR + 12 * sizeof(unsigned)
-#define dbgRegAddrDbgTempError  AXI_S_BASEADDR + 13 * sizeof(unsigned)
-#define dbgRegAddrDbgLinear     AXI_S_BASEADDR + 14 * sizeof(unsigned)
-#define dbgRegAddrDbgMaxPWM     AXI_S_BASEADDR + 15 * sizeof(unsigned)
+#define dbgRegAddrLowTemp       S_AXI_BASEADDR + 0 * sizeof(unsigned)
+#define dbgRegAddrMaxTemp       S_AXI_BASEADDR + 1 * sizeof(unsigned)
+#define dbgRegAddrSmooth        S_AXI_BASEADDR + 2 * sizeof(unsigned)
+#define dbgRegAddrFixed         S_AXI_BASEADDR + 3 * sizeof(unsigned)
+#define dbgRegAddrTemp          S_AXI_BASEADDR + 4 * sizeof(unsigned)
+#define dbgRegAddrAlarm         S_AXI_BASEADDR + 5 * sizeof(unsigned)
+#define dbgRegAddrDbgState      S_AXI_BASEADDR + 6 * sizeof(unsigned)
+#define dbgRegAddrDbgPWM        S_AXI_BASEADDR + 7 * sizeof(unsigned)
+#define dbgRegAddrDbgUsePWM     S_AXI_BASEADDR + 8 * sizeof(unsigned)
+#define dbgRegAddrDbgLastPWM    S_AXI_BASEADDR + 9 * sizeof(unsigned)
+#define dbgRegAddrDbgRealTemp   S_AXI_BASEADDR + 10 * sizeof(unsigned)
+#define dbgRegAddrDbgUseTemp    S_AXI_BASEADDR + 11 * sizeof(unsigned)
+#define dbgRegAddrDbgLastTemp   S_AXI_BASEADDR + 12 * sizeof(unsigned)
+#define dbgRegAddrDbgTempError  S_AXI_BASEADDR + 13 * sizeof(unsigned)
+#define dbgRegAddrDbgLinear     S_AXI_BASEADDR + 14 * sizeof(unsigned)
+#define dbgRegAddrDbgMaxPWM     S_AXI_BASEADDR + 15 * sizeof(unsigned)
 
 
 int main(int argc, char **argv) {
@@ -175,7 +176,7 @@ int main(int argc, char **argv) {
     }
 
     unsigned const uPageSize = sysconf(_SC_PAGESIZE);
-    unsigned const uPageAddress = AXI_S_BASEADDR;
+    unsigned const uPageAddress = S_AXI_BASEADDR;
     unsigned const uPageOffset = uPageAddress - (uPageAddress & (~(uPageSize-1)));
 
     int fd = open ("/dev/mem", O_RDWR);
